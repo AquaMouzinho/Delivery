@@ -3,9 +3,9 @@
 
 #include "Item.hpp"
 
-class Arma :public Item{
+class Arma : public Item{
 public:
-    Arma() : Item() {}
+    Arma(const ObjetoDeJogo &obj) : Item(obj) {}
     ~Arma(){}
 
     int getDanoFisico() const {return danoFisico;}

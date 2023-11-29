@@ -6,13 +6,18 @@
 
 class Dialog : public ObjetoDeJogo {
 public:
-    Dialog(const ObjetoDeJogo &obj) : ObjetoDeJogo(obj) {}
+    Dialog(ObjetoDeJogo &obj, std::string texto = "", unsigned width = 3, unsigned length = 3);
     virtual ~Dialog() {}
 
-    void show() const;
+    bool isAtivado() const { return ativado;}
+    void switchAtivado() { ativado = !ativado;}
 private:
-    int width, length, velocidadeTexto;
+    bool ativado;
+    unsigned width, length, velocidadeTexto;
     std::string texto;
+
+    bool constroiDialog();
+    std::string particionaString(std::string &obj, unsigned int inicio, unsigned int fim);
 };
 
 #endif

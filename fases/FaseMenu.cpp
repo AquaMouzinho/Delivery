@@ -6,11 +6,17 @@
 void FaseMenu::init(){
     objs.push_back(new ObjetoDeJogo("Titulo", Sprite("src/sprites/telas/staticMenuTitle.img"),5,54));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu1", TextSprite("NOVO JOGO"), 20, 70));
+    objs.push_back(new ObjetoDeJogo("OPMenu1", TextSprite("CRIAR PERSONAGEM"), 21, 70));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu2", TextSprite("SAIR"), 23, 70));
+    objs.push_back(new ObjetoDeJogo("OPMenu2", TextSprite("MAPA MUNDI"), 23, 70));
 
-    objs.push_back(new ObjetoDeJogo("Seletor", TextSprite("→ "), 20, 65));
+    objs.push_back(new ObjetoDeJogo("OPMenu3", TextSprite("MAPA CIDADE"), 25, 70));
+
+    objs.push_back(new ObjetoDeJogo("OPMenu4", TextSprite("BATALHA"), 27, 70));
+
+    objs.push_back(new ObjetoDeJogo("OPMenu5", TextSprite("SAIR"), 29, 70));
+
+    objs.push_back(new ObjetoDeJogo("Seletor", TextSprite("→ "), 21, 65));
     pSel = objs.back();
 
     op = Fase::OP_1;
@@ -34,25 +40,25 @@ unsigned FaseMenu::run(SpriteBuffer &screen){
             {
             case 'q':
                 gameState = Fase::LEVEL_COMPLETE;
-                return Fase::OP_2;
+                return Fase::OP_5;
             
-            case 'w':
-                {
-                    op = Fase::OP_1 + (op - Fase::OP_1 +1) % 2;
-
-                    pSel->moveTo(20 + (op - Fase::OP_1) * 2, 65);
-                }
-                break;
             case 's':
                 {
-                    op = Fase::OP_1 + (2 + ((op - Fase::OP_1) -1)) % 2;
+                    op = Fase::OP_1 + (op - Fase::OP_1 +1) % 5;
 
-                    pSel->moveTo(20 + (op - Fase::OP_1) * 3, 65);
+                    pSel->moveTo(21 + (op - Fase::OP_1) * 2, 65);
+                }
+                break;
+            case 'w':
+                {
+                    op = Fase::OP_1 + (5 + ((op - Fase::OP_1) -1)) % 5;
+
+                    pSel->moveTo(21 + (op - Fase::OP_1) * 2, 65);
                 }
                 break;
             case 'f':
                 {
-                    if(op == Fase::OP_2){
+                    if(op == Fase::OP_5){
                         gameState = Fase::LEVEL_COMPLETE;
                     }
                     tela = Fase::PAUSED;

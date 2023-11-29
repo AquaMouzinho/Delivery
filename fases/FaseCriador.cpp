@@ -65,6 +65,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
             switch(entrada){
                 case 'q':
                     tela_state = Fase::LEVEL_COMPLETE;
+                    this->closeThreads();
                     return Fase::LEVEL_COMPLETE;
                 case 'w':
                     {
@@ -180,6 +181,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                             if(salvarSpriteHeroi()){
                                 //sprtFront->putAt(Sprite("src/heroi_front.img"),0,0);
                                 tela_state = Fase::LEVEL_COMPLETE;
+                                this->closeThreads();
                                 return Fase::LEVEL_COMPLETE;
                             }
                         }
@@ -195,6 +197,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
     tela_state = Fase::LEVEL_COMPLETE;
+    this->closeThreads();
     return Fase::OP_2;
 }
 
@@ -224,6 +227,7 @@ void FaseCriador::openPlayerChannel(FaseCriador &obj){
 }
 
 void FaseCriador::closeThreads(){
+    cout << "Pressione qualquer tecla para retornar...";
     tela_thread_.join();
 }
 

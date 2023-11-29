@@ -13,6 +13,9 @@ public:
 	unsigned getLargura() const {return this->largura;}
 	unsigned getAltura() const {return this->alturaSprite;}
 	
+	void setLargura(unsigned l) { this->largura = l;}
+	void setAltura(unsigned a) { this->alturaSprite = a;}
+
 	virtual void putAt(const SpriteBase &, unsigned , unsigned) = 0;
 	//virtual void putCenter(const SpriteBase &, unsigned) = 0; //acho que essas eu consiga ja implementar aqui
 	//virtual void putLeft(const SpriteBase &, unsigned) = 0;

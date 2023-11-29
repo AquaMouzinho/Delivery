@@ -16,13 +16,14 @@ class Fase : public RenderBase
 public:
 
 	enum {
-		GAME_OVER,										//jogador nao completou fase
-		MENU,											//opcao padrao para indicar fase menu
-		OP_1, OP_2, OP_3, OP_4, OP_5,					//opcoes para menu
-		LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5,	//fases
-		PLAYING, PAUSED,								//opcoes para a fase
-		LEVEL_COMPLETE,									//fase completada
-		END_GAME										//quando jogador nao quiser mais jogar
+		GAME_OVER,																//jogador nao completou fase
+		MENU, CRIADOR_PERSONA,													//opcao padrao para indicar fase menu
+		OP_1, OP_2, OP_3, OP_4, OP_5,											//opcoes para menu
+		LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8,	//fases
+		SHOP,																	//loja
+		PLAYING, PAUSED,														//opcoes para a fase
+		LEVEL_COMPLETE,															//fase completada
+		END_GAME																//quando jogador nao quiser mais jogar
 	};
 
 

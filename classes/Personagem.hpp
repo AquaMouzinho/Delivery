@@ -10,9 +10,11 @@
 class Personagem : public ObjetoDeJogo {
 public:
     Personagem(const ObjetoDeJogo &obj) : ObjetoDeJogo(obj) {}
+    Personagem(const ObjetoDeJogo &obj, int hp, int atk, int def, std::list<Ataque*> ataques) : ObjetoDeJogo(obj), nome("Nimbus"), money(0), max_hp(hp), current_hp(hp), atk(atk), def(def), sp(3), current_sp(0), pp(10), status(0), ataques(ataques) {}
+    Personagem(const ObjetoDeJogo &obj, std::string n, int m, int hp, int atk, int def, int sp, int pp, std::list<Ataque*> ataques) : ObjetoDeJogo(obj), nome(n), money(m), max_hp(hp), current_hp(hp), atk(atk), def(def), sp(sp), current_sp(0), pp(pp), status(0), ataques(ataques) {}
     virtual ~Personagem(){}
 
-    virtual int receberDano();
+    //virtual int receberDano();
 
     std::string getNome() const {return nome;}
     int getMoney() const {return money;}
@@ -20,6 +22,7 @@ public:
     int getMAXHPValue() const {return max_hp;}
     int getAtkValue() const {return atk;}
     int getDefValue() const {return def;}
+    int getCurrentSPValue() const {return current_sp;}
     int getSPValue() const {return sp;}
     int getPPValue() const {return pp;}
     int getStatusValue() const {return status;}
@@ -29,7 +32,7 @@ public:
 
 private:
     std::string nome;
-    int money, current_hp, max_hp, atk, def, current_sp, pp, status;
+    int money, current_hp, max_hp, atk, def, current_sp, sp, pp, status;
     std::list<Ataque*> ataques;
 };
 

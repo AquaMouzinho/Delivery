@@ -6,6 +6,8 @@
 #include "../ASCII_Engine/SpriteBase.hpp"
 #include "../ASCII_Engine/SpriteBuffer.hpp"
 
+#include "../classes/Heroi.hpp"
+
 #include <string>
 #include <array>
 #include <thread>

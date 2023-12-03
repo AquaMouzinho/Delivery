@@ -12,7 +12,7 @@
 
 class FaseMundo : public Fase {
 public:
-    FaseMundo(std::string name, const Sprite &bkg, const Heroi &heroi) : Fase(name, bkg), hero(heroi) {}
+    FaseMundo(std::string name, const Sprite &bkg, Heroi &heroi) : Fase(name, bkg), hero(heroi){}
     virtual ~FaseMundo() {}
 
     virtual void init();
@@ -30,7 +30,6 @@ private:
 
     bool keyPressed;
     unsigned op, tela_state, tela;
-
     char entrada;
     std::thread mundo_thread_;
 

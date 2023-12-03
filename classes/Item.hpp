@@ -2,12 +2,12 @@
 #define ITEM_HPP
 
 #include <string>
-#include "../ASCII_Engine/ObjetoDeJogo.hpp"
 
-class Item : public ObjetoDeJogo {
+class Item {
 public:
-    Item(const ObjetoDeJogo &obj) : ObjetoDeJogo(obj) {}
-    virtual ~Item(){}
+    Item(std::string nome, std::string descricao) : nome(nome), descricao(descricao) {}
+    ~Item(){}
+
 private:
     std::string nome, descricao;
 };

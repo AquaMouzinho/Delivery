@@ -5,11 +5,13 @@
 
 class Arma : public Item{
 public:
-    Arma(const ObjetoDeJogo &obj) : Item(obj) {}
+    Arma(std::string nome, std::string descricao, int dano) : Item(nome, descricao), danoFisico(dano) {}
     ~Arma(){}
 
     int getDanoFisico() const {return danoFisico;}
+    
 private:
+    std::string nome, descricao;
     int danoFisico;
 };
 #endif

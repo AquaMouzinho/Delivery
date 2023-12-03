@@ -182,7 +182,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                                 //sprtFront->putAt(Sprite("src/heroi_front.img"),0,0);
                                 tela_state = Fase::LEVEL_COMPLETE;
                                 this->closeThreads();
-                                return Fase::LEVEL_COMPLETE;
+                                return Fase::OP_2;
                             }
                         }
                     }

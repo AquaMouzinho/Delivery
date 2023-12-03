@@ -5,7 +5,7 @@
 
 class Portal : public ObjetoDeJogo {
 public:
-    Portal(const ObjetoDeJogo &obj, unsigned e) : ObjetoDeJogo(obj), enumeracao(e), completado(false) {}
+    Portal(const ObjetoDeJogo &obj, unsigned e, bool c = false) : ObjetoDeJogo(obj), enumeracao(e), completado(c) {}
     virtual ~Portal() {}
 
     unsigned getEnumeracao() const { return enumeracao; }

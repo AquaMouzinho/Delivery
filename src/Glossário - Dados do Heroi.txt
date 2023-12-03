@@ -1,0 +1,24 @@
+Glossário de herodata
+----------------------
+Nome: Nome do Jogador (Max. 8 caracteres) - string
+Money: QTD. de dinheiro - int
+
+HP (Atual/Maximo): QTD. de vida - int
+PP (Atual/Maximo): Power Points - Pontos para poder atacar - int
+SP (Atual/Maximo): Special Points - Pontos para golpes especiais (Max. 3) - int
+ATK: valor de atk base do Heroi - int
+DEF: valor de def base do Heroi - int
+
+ArmaEquipada: nullptr(not) ou Arma*({(NomeDaArma),(descricao),(dano)})
+Bag: Objeto com mapa de Item
+
+Vivo: true - vivo; false - morto
+Status: 0 - Normal
+        1 - Envenenado
+        2 - Paralisado
+
+xMapa, yMapa: Posicao no mapa global
+Fases concluidas: Vetor contendo quais batalhas foram concluida
+                  0 - Falso
+                  1 - Verdadeiro
+                  {0,0,0,0,0,0}

@@ -17,7 +17,7 @@ public:
 
 	enum {
 		GAME_OVER,																//jogador nao completou fase
-		MENU, CRIADOR_PERSONA,													//opcao padrao para indicar fase menu
+		MENU, CRIADOR_PERSONA, MAPA,											//opcao padrao para indicar fase menu
 		OP_1, OP_2, OP_3, OP_4, OP_5,											//opcoes para menu
 		LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8,	//fases
 		SHOP,																	//loja

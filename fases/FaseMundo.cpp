@@ -12,10 +12,10 @@ void FaseMundo::init(){
     txtQtdHP = objs.back()->getSprite();
 
     objs.push_back(new ObjetoDeJogo("TxtHPMaxHeroi", TextSprite(std::to_string(hero.getMAXHPValue())), 13, 149));
-    objs.push_back(new ObjetoDeJogo("TxtPPAtHeroi", TextSprite(std::to_string(hero.getPPValue())), 15, 146));
+    objs.push_back(new ObjetoDeJogo("TxtPPAtHeroi", TextSprite(std::to_string(hero.getMAXPPValue())), 15, 146));
     txtQtdPP = objs.back()->getSprite();
 
-    objs.push_back(new ObjetoDeJogo("TxtPPMaxHeroi", TextSprite(std::to_string(hero.getPPValue())), 15, 149));
+    objs.push_back(new ObjetoDeJogo("TxtPPMaxHeroi", TextSprite(std::to_string(hero.getCurrentPPValue())), 15, 149));
     objs.push_back(new ObjetoDeJogo("FrontHero", Sprite("src/sprites/heroi/heroi_front.img"), 17, 131));
 
 
@@ -28,10 +28,10 @@ void FaseMundo::init(){
     objs.push_back(new ObjetoDeJogo("Gate", Sprite("src/sprites/overworld/gate.img"),18, 44));
     objs.push_back(new ObjetoDeJogo("Person", Sprite("src/sprites/overworld/person.img"),22, 82));
 
-    fases[0] = new Portal(ObjetoDeJogo("Meio do Nada", Sprite("src/sprites/overworld/level.img"), 18, 17), Fase::LEVEL_1);
+    fases[0] = new Portal(ObjetoDeJogo("Meio do Nada", Sprite("src/sprites/overworld/level.img"), 18, 17), Fase::LEVEL_1,(hero.fasesConcluidas[0] ? true : false));
     objs.push_back(fases[0]);
     
-    fases[1] = new Portal(ObjetoDeJogo("Colmeia", Sprite("src/sprites/overworld/level.img"), 11, 25), Fase::LEVEL_2);
+    fases[1] = new Portal(ObjetoDeJogo("Colmeia", Sprite("src/sprites/overworld/level.img"), 11, 25), Fase::LEVEL_2, (hero.fasesConcluidas[1] ? true : false));
     objs.push_back(fases[1]);
     
     fases[2] = new Portal(ObjetoDeJogo("Cidadela", Sprite("src/sprites/overworld/level.img"), 11,40), Fase::LEVEL_3);
@@ -43,16 +43,16 @@ void FaseMundo::init(){
     fases[4] = new Portal(ObjetoDeJogo("Areia Roxa", Sprite("src/sprites/overworld/level.img"), 30,60), Fase::LEVEL_4);
     objs.push_back(fases[4]);
     
-    fases[5] = new Portal(ObjetoDeJogo("Reino Bern", Sprite("src/sprites/overworld/level.img"), 23,74), Fase::LEVEL_5);
+    fases[5] = new Portal(ObjetoDeJogo("Reino Bern", Sprite("src/sprites/overworld/level.img"), 23,74), Fase::LEVEL_5,  (hero.fasesConcluidas[2] ? true : false));
     objs.push_back(fases[5]);
     
-    fases[6] = new Portal(ObjetoDeJogo("Stupendus Circ", Sprite("src/sprites/overworld/level.img"), 22,90), Fase::LEVEL_6);
+    fases[6] = new Portal(ObjetoDeJogo("Stupendus Circ", Sprite("src/sprites/overworld/level.img"), 22,90), Fase::LEVEL_6,  (hero.fasesConcluidas[3] ? true : false));
     objs.push_back(fases[6]);
     
-    fases[7] = new Portal(ObjetoDeJogo("Surpresa", Sprite("src/sprites/overworld/level.img"), 15,113), Fase::LEVEL_7);
+    fases[7] = new Portal(ObjetoDeJogo("Surpresa", Sprite("src/sprites/overworld/level.img"), 15,113), Fase::LEVEL_7,  (hero.fasesConcluidas[4] ? true : false));
     objs.push_back(fases[7]);
     
-    fases[8] = new Portal(ObjetoDeJogo("Batalha Final", Sprite("src/sprites/overworld/level.img"), 11,113), Fase::LEVEL_8);
+    fases[8] = new Portal(ObjetoDeJogo("Batalha Final", Sprite("src/sprites/overworld/level.img"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
     objs.push_back(fases[8]);
     
     sprtHero = new ObjetoDeJogo("Heroi", Sprite("src/sprites/overworld/hero.img"), hero.getYMapa(), hero.getXMapa());
@@ -78,7 +78,15 @@ void FaseMundo::init(){
 
 unsigned FaseMundo::run(SpriteBuffer &screen){
     bool colideComFase = false;
+    tela_state = Fase::PLAYING;
+    
     while(true){
+        // if(tela_state == Fase::PLAYING){
+        //     txtQtdHP->putAt(TextSprite("99"), 0, 0);
+        // } else {
+        //     txtQtdHP->putAt(TextSprite("00"), 0, 0);
+        // }
+
         if(isKeyPressed()){
             keyPressed = false;
             switch (entrada)
@@ -113,8 +121,10 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                     if(colideComFase){
                         for(auto &fase : fases){
                             if(fase->colideCom(*sprtHero)){
-                                tela_state = Fase::LEVEL_COMPLETE;
-                                cout << "Pressione qualquer tecla para confirmar...";
+                                tela_state = Fase::PAUSED;
+                                hero.setXMapa(sprtHero->getPosC());
+                                hero.setYMapa(sprtHero->getPosL());
+                                hero.salvarDados();
                                 this->closeThreads();
                                 return fase->getEnumeracao();
                             }
@@ -124,6 +134,10 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                     
                 }
                 break;
+            case 'q':
+                tela_state = Fase::END_GAME;
+                closeThreads();
+                return Fase::MENU;
             }
 
         }

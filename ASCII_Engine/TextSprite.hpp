@@ -25,6 +25,9 @@ private:
 	
 	//SpriteBase
 	virtual std::string getLinha(unsigned) const;
+
+	unsigned int contarCaracteres(const std::string &) const;
+	std::string particionaString(std::string &, unsigned int inicio, unsigned int fim);
 };
 
 #endif // TEXTSPRITE_HPP

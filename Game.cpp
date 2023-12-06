@@ -1,12 +1,3 @@
-#include "ASCII_Engine/Sprite.hpp"
-#include "ASCII_Engine/SpriteBuffer.hpp"
-#include "ASCII_Engine/Fase.hpp"
-
-#include "fases/FaseMenu.hpp"
-#include "fases/FaseMundo.hpp"
-#include "fases/FaseCriador.hpp"
-#include "fases/FaseBatalha.hpp"
-#include "classes/Heroi.hpp"
 #include "Game.hpp"
 
 SpriteBuffer Game::screen(161, 40);
@@ -49,7 +40,7 @@ void Game::run(){
             break;
         case Fase::LEVEL_1:
             {
-                FaseBatalha level1("Level0", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao1",Sprite("src/sprites/viloes/Scorpion.img"), 5, 60), "Scorpion", 100, 50, 2, 5, 1, 4, {}), *hero);
+                FaseBatalha level1("Level0", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao1",Sprite("src/sprites/viloes/Scorpion.img"), 5, 60), "Scorpion", 100, 30, 7, 4, 4, 1, {new Ataque("Ferroada", 1, 0), new Ataque("Chuva de Presas", 4, 4)}), *hero);
                 level1.init();
                 state = level1.run(screen);
                 level = Fase::LEVEL_2;
@@ -57,7 +48,7 @@ void Game::run(){
             break;
         case Fase::LEVEL_2:
             {
-                FaseBatalha level2("Level1", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao2",Sprite("src/sprites/viloes/KillBee.img"), 5, 70), "Kill Bee", 100, 30, 10, 10, 5, 4, {}), *hero);
+                FaseBatalha level2("Level1", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao2",Sprite("src/sprites/viloes/KillBee.img"), 5, 70), "Kill Bee", 100, 50, 10, 6, 4, 1, {new Ataque("Polén Queimante", 1, 0), new Ataque("Contra-Ataque", 6, 4)}), *hero);
                 level2.init();
                 state = level2.run(screen);
                 level = Fase::LEVEL_3;
@@ -80,28 +71,28 @@ void Game::run(){
         //     break;
         case Fase::LEVEL_5:
             {
-                FaseBatalha level3("Level2", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao3",Sprite("src/sprites/viloes/KingBernatus.img"), 10, 60), "King Bernatus", 1000, 130, 20, 17, 5,4, {}), *hero);
+                FaseBatalha level3("Level2", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao3",Sprite("src/sprites/viloes/KingBernatus.img"), 10, 60), "King Bern", 1000, 65, 6, 8, 4, 1, {new Ataque("Raio-Laser", 3, 0), new Ataque("Junta de Drones", 10, 4)}), *hero);
                 level3.init();
                 state = level3.run(screen);
             }
             break;
         case Fase::LEVEL_6:
             {
-                FaseBatalha level4("Level3", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao4",Sprite("src/sprites/viloes/Clowny.img"), 8, 80), "Clowny", 0, 200, 30, 25, 10, 4, {}), *hero);
+                FaseBatalha level4("Level3", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao4",Sprite("src/sprites/viloes/Clowny.img"), 8, 80), "Fifaifi", 0, 80, 15, 10, 4, 1, {new Ataque("Cócegas", 2, 0), new Ataque("Ping-Pong", 15, 4)}), *hero);
                 level4.init();
                 state = level4.run(screen);
             }
             break;
         case Fase::LEVEL_7:
             {
-                FaseBatalha level5("Level4", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao5",Sprite("src/sprites/viloes/Fear.img"), 5, 70)), *hero);
+                FaseBatalha level5("Level4", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao5",Sprite("src/sprites/viloes/Fear.img"), 5, 70), "Fiero", 0, 75, 20, 20, 4, 1, {new Ataque("Suspiro Lacerante", 2, 0), new Ataque("Entranhas", 10, 4)}), *hero);
                 level5.init();
                 state = level5.run(screen);
             }
             break;
         case Fase::LEVEL_8:
             {
-                FaseBatalha level6("Level5", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao6",Sprite("src/sprites/viloes/Horns.img"), 8, 70)), *hero);
+                FaseBatalha level6("Level5", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao6",Sprite("src/sprites/viloes/Horns.img"), 8, 70),"Horns", 0, 100, 30, 20, 4, 1, {new Ataque("Laceração", 5, 0), new Ataque("Tira-Olhos", 8, 0), new Ataque("Mal Súbito", 25, 4)}), *hero);
                 level6.init();
                 state = level6.run(screen);
             }
@@ -113,9 +104,8 @@ void Game::run(){
 			state = Fase::END_GAME;
 			break;
         case Fase::LEVEL_COMPLETE:
-            //state = worldMap.run(screen);
             hero->atualizarDados();
-            state = Fase::MENU;
+            state = Fase::OP_2;
             break;
         default:
             {

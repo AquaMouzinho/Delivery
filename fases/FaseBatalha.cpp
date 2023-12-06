@@ -3,11 +3,11 @@
 void FaseBatalha::init(){
     objs.push_back(new ObjetoDeJogo("TxtNomeHeroi", TextSprite(heroi->getNome()),25,23));
     objs.push_back(new ObjetoDeJogo("TxtMaxHPHeroi", TextSprite(to_string(heroi->getMAXHPValue())),27,43));
-    objs.push_back(new ObjetoDeJogo("TxtMaxSPHeroi", TextSprite(to_string(heroi->getMAXPPValue())),28,43));
+    objs.push_back(new ObjetoDeJogo("TxtMaxPPHeroi", TextSprite(to_string(heroi->getMAXPPValue())),28,43));
     objs.push_back(new ObjetoDeJogo("TxtHPHeroi", TextSprite(to_string(heroi->getCurrentHPValue())),27,37));
     txtQtdHPAtualHeroi = objs.back()->getSprite();
-    objs.push_back(new ObjetoDeJogo("TxtSPHeroi", TextSprite(to_string(heroi->getCurrentPPValue())),28,37));
-    txtQtdSPAtualHeroi = objs.back()->getSprite();
+    //objs.push_back(new ObjetoDeJogo("TxtSPHeroi", TextSprite(std::string("♦",heroi->getCurrentPPValue())),29,49));
+    //txtQtdSPAtualHeroi = objs.back()->getSprite();
 
     objs.push_back(new ObjetoDeJogo("TxtNomeVilao", TextSprite(vilao->getNome()),3,26));
     objs.push_back(new ObjetoDeJogo("TxtMaxHPVilao", TextSprite(to_string(vilao->getMAXHPValue())), 5,43));
@@ -38,9 +38,29 @@ void FaseBatalha::init(){
         ++i;
     }
 
+    pocoes.push_back(new ObjetoDeJogo("PocaoHP", TextSprite("Poção HP"), 24, 120));
+    pocoes.back()->desativarObj();
+    objs.push_back(pocoes.back());
+    pocoes.push_back(new ObjetoDeJogo("QTDPocaoHP", TextSprite(to_string(heroi->getBag()->quantidadeDoItem("PocaoHP"))), 24, 132));
+    pocoes.back()->desativarObj();
+    objs.push_back(pocoes.back());
+    pocoes.push_back(new ObjetoDeJogo("PocaoSP", TextSprite("Poção SP"), 26, 120));
+    pocoes.back()->desativarObj();
+    objs.push_back(pocoes.back());
+    pocoes.push_back(new ObjetoDeJogo("QTDPocaoSP", TextSprite(to_string(heroi->getBag()->quantidadeDoItem("PocaoSP"))), 26, 132));
+    pocoes.back()->desativarObj();
+    objs.push_back(pocoes.back());
+    pocoes.push_back(new ObjetoDeJogo("Retorno", TextSprite("Retornar"), 28, 120));
+    pocoes.back()->desativarObj();
+    objs.push_back(pocoes.back());
+
     pSelPopUp = new ObjetoDeJogo("SeletorPopUp", TextSprite("►"), 24, 116);
     objs.push_back(pSelPopUp);
     pSelPopUp->desativarObj();
+
+    txtNomeAbaPopUp = new ObjetoDeJogo("TextoAba", TextSprite("ATACK"), 22, 120);
+    txtNomeAbaPopUp->desativarObj();
+    objs.push_back(txtNomeAbaPopUp);
 
     objs.push_back(vilao);
 
@@ -112,54 +132,74 @@ unsigned FaseBatalha::run(SpriteBuffer &screen){
             case 'f':
                 {
                     if(opTela){ // TRATAMENTO POPUP ESCOLHA ATAQUE
-                        ataqueEscolhido = getAtaque(heroi->getAtaques(), (op2 - Fase::OP_1));
-                        if(ataqueEscolhido->getCusto() <= heroi->getCurrentSPValue()){
-                            /* TURNO HEROI */
-                                // fechar popUp
-                                opTela = false;
-                                popUp->desativarObj();
-                                for(auto &ataque : ataques) ataque->desativarObj();
-                                pSelPopUp->desativarObj();
+                        if(op == Fase::OP_1){
+                            ataqueEscolhido = getAtaque(heroi->getAtaques(), (op2 - Fase::OP_1));
+                            if(ataqueEscolhido->getCusto() <= heroi->getCurrentSPValue()){
+                                /* TURNO HEROI */
+                                    // fechar popUp
+                                    opTela = false;
+                                    popUp->desativarObj();
+                                    txtNomeAbaPopUp->desativarObj();
+                                    for(auto &ataque : ataques) ataque->desativarObj();
+                                    pSelPopUp->desativarObj();
 
-                                // modificar heroi
-                                heroi->decrementSP(ataqueEscolhido->getCusto());
-                                if(ataqueEscolhido->getCusto() < 1 && heroi->getCurrentSPValue() < 3) heroi->incrementSP();
+                                    // modificar heroi
+                                    heroi->decrementSP(ataqueEscolhido->getCusto());
+                                    if(ataqueEscolhido->getCusto() < 1 && heroi->getCurrentSPValue() < 3) heroi->incrementSP();
+                                    //txtQtdSPAtualHeroi->putAt(TextSprite(std::string("♦",heroi->getCurrentPPValue())), 0, 0);
+                                    
+                                    // vilao recebe dano
+                                    int somaDano = heroi->getAtkValue() + ataqueEscolhido->getDano();
+                                    vilao->receberDano(somaDano);
 
-                                // vilao recebe dano
-                                int somaDano = heroi->getAtkValue() + ataqueEscolhido->getDano();
-                                vilao->receberDano(somaDano);
+                                    if(!vilao->isAlive()) {
+                                        system("clear");
+                                        this->update();
+                                        this->draw(screen);
+                                        this->show(screen);
+                                        std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-                                //atualiza tela
-                                //txtQtdHPAtualVilao->putAt(TextSprite(string("0", txtQtdHPAtualVilao->getLargura())), 0, 0);
-                                txtQtdHPAtualVilao->putAt(TextSprite(to_string(vilao->getCurrentHPValue())), 0, 0);
-                                txtNomeGolpe->putAt(TextSprite(ataqueEscolhido->getNome()+": "+to_string(somaDano)), 0, 0);
+                                        int it = (this->getName().back() - '0');
+                                        heroi->fasesConcluidas[it] = 1;
+                                        heroi->salvarDados();
+                                        tela_state = Fase::LEVEL_COMPLETE;
+                                        closeThreads();
+                                        return Fase::LEVEL_COMPLETE;
+                                    }
 
-                                system("clear");
-                                this->update();
-                                this->draw(screen);
-                                this->show(screen);
-                                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                                    //atualiza tela
+                                    //txtQtdHPAtualVilao->putAt(TextSprite(string("0", txtQtdHPAtualVilao->getLargura())), 0, 0);
+                                    txtQtdHPAtualVilao->putAt(TextSprite(to_string(vilao->getCurrentHPValue())), 0, 0);
+                                    txtNomeGolpe->putAt(TextSprite(ataqueEscolhido->getNome()+": "+to_string(somaDano)), 0, 0);
 
-                            /* TURNO VILAO */
-                            if(vilao->isAlive()){
-                                handleVillainAttack();
-                                txtQtdHPAtualHeroi->putAt(TextSprite(to_string(heroi->getCurrentHPValue())),0,0);
-                            } else {
-                                int it = (this->getName().back() - '0');
-                                heroi->fasesConcluidas[it] = 1;
-                                heroi->salvarDados();
-                                tela_state = Fase::LEVEL_COMPLETE;
-                                closeThreads();
-                                return Fase::LEVEL_COMPLETE;
-                            }                
+                                    system("clear");
+                                    this->update();
+                                    this->draw(screen);
+                                    this->show(screen);
+                                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+                                /* TURNO VILAO */
+                                    handleVillainAttack();
+                                    txtQtdHPAtualHeroi->putAt(TextSprite(to_string(heroi->getCurrentHPValue())),0,0);
+                                              
+                            }else {
+                                txtNomeGolpe->putAt(TextSprite("Sem PP suficiente"), 0, 0);
+                            }
                         }else {
-                            txtNomeGolpe->putAt(TextSprite("Sem PP suficiente"), 0, 0);
+                            
                         }
+
                     }else{ // TRATAMENTO ESCOLHA DE TELAS
                         opTela = true;
-                        //op = Fase::OP_1;
                         popUp->ativarObj();
-                        for(auto &ataque : ataques) ataque->ativarObj();
+                        if(op == Fase::OP_2){
+                            txtNomeAbaPopUp->getSprite()->putAt(TextSprite("BOLSA"),0,0);
+                            for(auto &pocao : pocoes) pocao->ativarObj();
+                        } else {
+                            txtNomeAbaPopUp->getSprite()->putAt(TextSprite("ATACK"),0,0);
+                            for(auto &ataque : ataques) ataque->ativarObj();
+                        }
+                        txtNomeAbaPopUp->ativarObj();
                         pSelPopUp->ativarObj();
                     }
                 }
@@ -212,10 +252,19 @@ Ataque* FaseBatalha::getAtaque(list<Ataque*> lista, unsigned _i) {
 }
 
 void FaseBatalha::handleVillainAttack() {
-    if(vilao->getCurrentSPValue() > 3){ // Usar Supremo
-
-    }else{ // Ataque Normal
-        heroi->receberDano(1);
-        vilao->incrementSP();
+    for(auto &ataque: vilao->getAtaques()){
+        if(vilao->getCurrentSPValue() > 3){
+            if(ataque->getCusto() == 4) {
+                heroi->receberDano(ataque->getDano() - (heroi->getDefValue()*0.5));
+                vilao->setCurrentSP(0);
+                break;
+            }
+        }else{
+            if(ataque->getCusto() == 0){
+                heroi->receberDano(ataque->getDano() - (heroi->getDefValue()*0.5));
+                vilao->incrementSP();
+                break;
+            }
+        }
     }
 }

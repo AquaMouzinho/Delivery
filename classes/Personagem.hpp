@@ -40,6 +40,7 @@ public:
     void setCurrentHP(int novohp) { current_hp = novohp; }
     void setCurrentSP(int novosp) { current_sp = novosp; }
     void setCurrentPP(int novopp) { current_pp = novopp; }
+    void setNome(std::string novoNome) { nome = novoNome; }
 
 private:
     bool vivo;

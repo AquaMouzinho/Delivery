@@ -4,6 +4,9 @@
 #include "../ASCII_Engine/Fase.hpp"
 #include "../classes/Heroi.hpp"
 #include "../classes/Portal.hpp"
+#include "../classes/Npc.hpp"
+#include "../classes/Chest.hpp"
+#include "../classes/Door.hpp"
 #include "../classes/Dialog.hpp"
 
 #include <thread>
@@ -25,7 +28,10 @@ private:
     Heroi hero;
     ObjetoDeJogo *sprtHero, *placa;
     Dialog *caixaDeTexto;
+    Door *porta;
+    Chest *caixa;
     Portal *fases[9];
+    Npc *person;
     SpriteBase *txtFaseNome, *txtQtdHP, *txtQtdPP;
 
     bool keyPressed;

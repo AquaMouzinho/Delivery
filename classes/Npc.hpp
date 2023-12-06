@@ -9,13 +9,12 @@
 
 class Npc : public ObjetoDeJogo {
 public:
-    Npc(const ObjetoDeJogo &obj) : ObjetoDeJogo(obj) {}
+    Npc(const ObjetoDeJogo &obj, std::string nome = "", std::string texto = "") : ObjetoDeJogo(obj), nome(nome), texto(texto) {}
     virtual ~Npc(){}
 
-    void apresentarTexto(Dialog &) const;
+    //void apresentarTexto(const Dialog &) const;
 private:
-    std::string nome;
-    std::list<std::string> texto;
+    std::string nome, texto;
 };
 
 #endif

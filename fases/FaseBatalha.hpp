@@ -26,8 +26,8 @@ private:
     // Objetos Aparentes na tela
     Heroi *heroi;
     Monstro *vilao;
-    ObjetoDeJogo *pSelE, *pSelD, *pSelPopUp, *popUp;
-    std::list<ObjetoDeJogo*> ataques;
+    ObjetoDeJogo *pSelE, *pSelD, *pSelPopUp, *popUp, *txtNomeAbaPopUp;
+    std::list<ObjetoDeJogo*> ataques, pocoes;
     SpriteBase *txtNomeVilao, *txtQtdHPAtualVilao, *txtQtdHPVilao, *txtQtdPPAtualVilao, *txtNomeGolpe;
     SpriteBase *txtNomeHeroi, *txtQtdHPAtualHeroi, *txtQtdHPMaxHeroi, *txtQtdSPAtualHeroi, *txtQtdSPMaxHeroi, *txtQtdPPAtualHeroi;
 

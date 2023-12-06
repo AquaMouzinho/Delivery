@@ -5,9 +5,12 @@
 
 class Pocao :public Item {
 public:
-    Pocao(const ObjetoDeJogo &obj) : Item(obj) {}
+    Pocao(const Item &obj, bool hpPP = true, int qtd = 1) : Item(obj), qtdDeCura(1), hpOuPP(hpPP) {}
     virtual ~Pocao() {}
+    
 private:
+    bool hpOuPP; //hp = true | pp = false
     int qtdDeCura;
+
 };
 #endif

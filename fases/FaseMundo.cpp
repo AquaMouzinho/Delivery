@@ -20,18 +20,30 @@ void FaseMundo::init(){
 
 
     // Inicialização - objetos dinamicos
+
+    leitorMapa("src/collisions/worldCollision.col", mapaColisao);
+
     // Objetos interativos
-    objs.push_back(new ObjetoDeJogo("Chest1", Sprite("src/sprites/overworld/chest.img"), 9, 40));
+    caixa = new Chest(ObjetoDeJogo("Chest1", Sprite("src/sprites/overworld/chest.img"), 9, 40), Item("Chave", "Uma chave especial"));
+    mapaColisao[caixa->getPosL()][caixa->getPosC()] = 0;
+    objs.push_back(caixa);
+
     placa = new ObjetoDeJogo("Sign1", Sprite("src/sprites/overworld/sign.img"), 15, 29);
+    mapaColisao[placa->getPosL()][placa->getPosC()] = 0;
     objs.push_back(placa);
 
-    objs.push_back(new ObjetoDeJogo("Gate", Sprite("src/sprites/overworld/gate.img"),18, 44));
-    objs.push_back(new ObjetoDeJogo("Person", Sprite("src/sprites/overworld/person.img"),22, 82));
+    porta = new Door(ObjetoDeJogo("Gate", SpriteAnimado("src/sprites/overworld/gate.anm"),18, 44));
+    mapaColisao[porta->getPosL()][porta->getPosC()] = 0;
+    objs.push_back(porta);
 
-    fases[0] = new Portal(ObjetoDeJogo("Meio do Nada", Sprite("src/sprites/overworld/level.img"), 18, 17), Fase::LEVEL_1,(hero.fasesConcluidas[0] ? true : false));
+    person = new Npc(ObjetoDeJogo("Person", Sprite("src/sprites/overworld/person.img"),22, 82));
+    mapaColisao[person->getPosL()][person->getPosC()] = 0;
+    objs.push_back(person);
+
+    fases[0] = new Portal(ObjetoDeJogo("Meio do Nada", SpriteAnimado("src/sprites/overworld/level.anm"), 18, 17), Fase::LEVEL_1,(hero.fasesConcluidas[0] ? true : false));
     objs.push_back(fases[0]);
     
-    fases[1] = new Portal(ObjetoDeJogo("Colmeia", Sprite("src/sprites/overworld/level.img"), 11, 25), Fase::LEVEL_2, (hero.fasesConcluidas[1] ? true : false));
+    fases[1] = new Portal(ObjetoDeJogo("Colmeia", SpriteAnimado("src/sprites/overworld/level.anm"), 11, 25), Fase::LEVEL_2, (hero.fasesConcluidas[1] ? true : false));
     objs.push_back(fases[1]);
     
     fases[2] = new Portal(ObjetoDeJogo("Cidadela", Sprite("src/sprites/overworld/level.img"), 11,40), Fase::LEVEL_3);
@@ -43,16 +55,16 @@ void FaseMundo::init(){
     fases[4] = new Portal(ObjetoDeJogo("Areia Roxa", Sprite("src/sprites/overworld/level.img"), 30,60), Fase::LEVEL_4);
     objs.push_back(fases[4]);
     
-    fases[5] = new Portal(ObjetoDeJogo("Reino Bern", Sprite("src/sprites/overworld/level.img"), 23,74), Fase::LEVEL_5,  (hero.fasesConcluidas[2] ? true : false));
+    fases[5] = new Portal(ObjetoDeJogo("Reino Bern", SpriteAnimado("src/sprites/overworld/level.anm"), 23,74), Fase::LEVEL_5,  (hero.fasesConcluidas[2] ? true : false));
     objs.push_back(fases[5]);
     
-    fases[6] = new Portal(ObjetoDeJogo("Stupendus Circ", Sprite("src/sprites/overworld/level.img"), 22,90), Fase::LEVEL_6,  (hero.fasesConcluidas[3] ? true : false));
+    fases[6] = new Portal(ObjetoDeJogo("Stupendus Circ", SpriteAnimado("src/sprites/overworld/level.anm"), 22,90), Fase::LEVEL_6,  (hero.fasesConcluidas[3] ? true : false));
     objs.push_back(fases[6]);
     
-    fases[7] = new Portal(ObjetoDeJogo("Surpresa", Sprite("src/sprites/overworld/level.img"), 15,113), Fase::LEVEL_7,  (hero.fasesConcluidas[4] ? true : false));
+    fases[7] = new Portal(ObjetoDeJogo("Surpresa", SpriteAnimado("src/sprites/overworld/level.anm"), 15,113), Fase::LEVEL_7,  (hero.fasesConcluidas[4] ? true : false));
     objs.push_back(fases[7]);
     
-    fases[8] = new Portal(ObjetoDeJogo("Batalha Final", Sprite("src/sprites/overworld/level.img"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
+    fases[8] = new Portal(ObjetoDeJogo("Batalha Final", SpriteAnimado("src/sprites/overworld/level.anm"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
     objs.push_back(fases[8]);
     
     sprtHero = new ObjetoDeJogo("Heroi", Sprite("src/sprites/overworld/hero.img"), hero.getYMapa(), hero.getXMapa());
@@ -70,8 +82,6 @@ void FaseMundo::init(){
     objs.push_back(new ObjetoDeJogo("TxtPressione", TextSprite("PRESSIONE F"), 30, 138));
     objs.back()->desativarObj();
 
-    leitorMapa("src/collisions/worldCollision.col", mapaColisao);
-
     tela_state = Fase::PLAYING;
     mundo_thread_ = std::thread(&FaseMundo::runPlayerChannel, ref(*this));
 }
@@ -81,12 +91,6 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
     tela_state = Fase::PLAYING;
     
     while(true){
-        // if(tela_state == Fase::PLAYING){
-        //     txtQtdHP->putAt(TextSprite("99"), 0, 0);
-        // } else {
-        //     txtQtdHP->putAt(TextSprite("00"), 0, 0);
-        // }
-
         if(isKeyPressed()){
             keyPressed = false;
             switch (entrada)
@@ -121,17 +125,23 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                     if(colideComFase){
                         for(auto &fase : fases){
                             if(fase->colideCom(*sprtHero)){
-                                tela_state = Fase::PAUSED;
-                                hero.setXMapa(sprtHero->getPosC());
-                                hero.setYMapa(sprtHero->getPosL());
-                                hero.salvarDados();
-                                this->closeThreads();
-                                return fase->getEnumeracao();
+                                if(!fase->getCompletado()){
+                                    tela_state = Fase::PAUSED;
+                                    hero.setXMapa(sprtHero->getPosC());
+                                    hero.setYMapa(sprtHero->getPosL());
+                                    hero.salvarDados();
+                                    this->closeThreads();
+                                    return fase->getEnumeracao();
+                                }
                             }
                         }
                     }
 
-                    
+                    if(sprtHero->colideCom(*caixa)){
+                        hero.getBag()->adicionarItem(*(caixa->getItem()));
+                        mapaColisao[caixa->getPosL()][caixa->getPosC()] = 1;
+                        caixa->desativarObj();
+                    }
                 }
                 break;
             case 'q':
@@ -159,8 +169,12 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
             if(fase->colideCom(*sprtHero)){
                 if(fase->getPosC() == sprtHero->getPosC() && fase->getPosL() == sprtHero->getPosL()){
                     colideComFase = true;
-                    objs.back()->ativarObj();
-                    txtFaseNome->putAt(TextSprite(fase->getName()), 0, 0);
+                    if(fase->getCompletado()){
+                        txtFaseNome->putAt(TextSprite("Fase Concluida"), 0 , 0);
+                    }else{
+                        objs.back()->ativarObj();
+                        txtFaseNome->putAt(TextSprite(fase->getName()), 0, 0);
+                    }
                 }
             }
         }
@@ -168,6 +182,22 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
         if(!colideComFase){
             objs.back()->desativarObj();
             txtFaseNome->putAt(TextSprite("              "),0,0);
+        }
+
+        if(sprtHero->colideCom(*porta)){
+            if(hero.getBag()->temItem("Chave") && !porta->isAberto()){
+                mapaColisao[porta->getPosL()][porta->getPosC()] = 1;
+                hero.getBag()->removerItem("Chave");
+                porta->setIsAberto(true);
+            }
+        }
+
+        if(sprtHero->colideCom(*person)){
+            if(hero.getBag()->temItem("Chave da Cidade")){
+                mapaColisao[person->getPosL()][person->getPosC()] = 1;
+                hero.getBag()->removerItem("Chave da Cidade");
+                person->desativarObj();
+            }
         }
 
         system("clear");
@@ -231,7 +261,7 @@ bool FaseMundo::leitorMapa(std::string file, std::array<std::array<int, 160>, 40
         linah++;
     }
 
-    mapa[this->placa->getPosL()][this->placa->getPosC()] = 0;
+    //mapa[this->placa->getPosL()][this->placa->getPosC()] = 0;
 
     fin.close();
 

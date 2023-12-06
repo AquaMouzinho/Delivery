@@ -12,13 +12,15 @@ using namespace std;
 
 class Heroi : public Personagem {
 public:
-    Heroi(const ObjetoDeJogo &obj, const Bag &b, std::string nome = "Nimbus") : Personagem(nome, obj,10,5,5, {new Ataque("Ataque N", 0, 0), new Ataque("Ataque C", 2, 1), new Ataque("Supremo", 5, 3)}), armaEquipada(nullptr), bagDoHeroi(b), yMapa(18), xMapa(17), fasesConcluidas(6, 0) {}
+    Heroi(const ObjetoDeJogo &obj, const Bag &b, std::string nome = "Nimbus") : Personagem(nome, obj,50,5,5, {new Ataque("Ataque N", 0, 0), new Ataque("Ataque C", 2, 1), new Ataque("Supremo", 5, 3)}), armaEquipada(nullptr), bagDoHeroi(new Bag(b)), yMapa(18), xMapa(17), fasesConcluidas(6, 0) {}
     ~Heroi() {
         delete armaEquipada;
     }
     
     int getXMapa() const { return xMapa; }
     int getYMapa() const { return yMapa; }
+    Bag* getBag() const { return bagDoHeroi; }
+
     void setXMapa(int x) { xMapa = x; }
     void setYMapa(int y) { yMapa = y; }
 
@@ -26,9 +28,10 @@ public:
     bool atualizarDados();
 
     vector<int> fasesConcluidas;
+
 private:
     Arma *armaEquipada;
-    Bag bagDoHeroi;
+    Bag *bagDoHeroi;
     int xMapa, yMapa;
 };
 

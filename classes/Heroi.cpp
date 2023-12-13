@@ -15,10 +15,10 @@ bool Heroi::atualizarDados(){
             this->setCurrentHP(stoi(linha.substr(0, linha.find("/"))));
             break;
         case 3:
-            this->setCurrentSP(stoi(linha.substr(0, linha.find("/"))));
+            this->setCurrentPP(stoi(linha.substr(0, linha.find("/"))));
             break;
         case 4:
-            this->setCurrentPP(stoi(linha.substr(0, linha.find("/"))));
+            this->setCurrentSP(stoi(linha.substr(0, linha.find("/"))));
             break;
         case 10:
             this->setXMapa(stoi(linha.substr(0, linha.find(","))));

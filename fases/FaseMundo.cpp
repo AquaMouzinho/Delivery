@@ -76,7 +76,7 @@ void FaseMundo::init(){
     caixaDeTexto->desativarObj();
 
     // Placa Nome Fase
-    objs.push_back(new ObjetoDeJogo("TxtNomeFase", TextSprite(" Nome da fase "), 28, 136));
+    objs.push_back(new ObjetoDeJogo("TxtNomeFase", TextSprite("              "), 28, 136));
     txtFaseNome = objs.back()->getSprite();
 
     objs.push_back(new ObjetoDeJogo("TxtPressione", TextSprite("PRESSIONE F"), 30, 138));

@@ -44,8 +44,9 @@ void FaseCriador::init(){
     objs.push_back(new ObjetoDeJogo("SpriteP4",Sprite("src/sprites/heroi/partesHeroi/3/corpo0.img"),20,57));
     sprtCorpo = objs.back()->getSprite();
 
-    // objs.push_back(new ObjetoDeJogo("SpriteFront", Sprite("src/heroi_front.img"), 31, 30));
-    // sprtFront = objs.back()->getSprite();
+    caixaContinuar = new ObjetoDeJogo("CaixaContinuar", Sprite("src/sprites/itens/boxPersoCriado.img"), 15, 50);
+    caixaContinuar->desativarObj();
+    objs.push_back(caixaContinuar);
 
     linhaMenu = 0;
     colunaMenu = 0;
@@ -66,7 +67,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                 case 'q':
                     tela_state = Fase::LEVEL_COMPLETE;
                     this->closeThreads();
-                    return Fase::LEVEL_COMPLETE;
+                    return Fase::MENU;
                 case 'w':
                     {
                         if(!isMudarTraco()){
@@ -176,13 +177,26 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                 case 'f':
                     {
                         if(!(linhaMenu == 1 && colunaMenu == 2)){
+                            if(mudarTraco){
+                                pSelOpE->moveRight();
+                                pSelOpD->moveLeft();  
+                            } else {
+                                pSelOpE->moveLeft();
+                                pSelOpD->moveRight();
+                            }
                             mudarTraco = (mudarTraco ? false : true);
                         }else{
                             if(salvarSpriteHeroi()){
-                                //sprtFront->putAt(Sprite("src/heroi_front.img"),0,0);
+                                caixaContinuar->ativarObj();
                                 tela_state = Fase::LEVEL_COMPLETE;
+
+                                system("clear");
+                                this->update();
+                                this->draw(screen);
+                                this->show(screen);
+
                                 this->closeThreads();
-                                return Fase::OP_2;
+                                return Fase::LEVEL_1;
                             }
                         }
                     }

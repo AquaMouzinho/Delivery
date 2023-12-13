@@ -4,6 +4,7 @@
 #include "../ASCII_Engine/Fase.hpp"
 #include "../classes/Monstro.hpp"
 #include "../classes/Heroi.hpp"
+#include "../classes/Pocao.hpp"
 
 #include <thread>
 #include <chrono>
@@ -26,13 +27,15 @@ private:
     // Objetos Aparentes na tela
     Heroi *heroi;
     Monstro *vilao;
-    ObjetoDeJogo *pSelE, *pSelD, *pSelPopUp, *popUp, *txtNomeAbaPopUp;
     std::list<ObjetoDeJogo*> ataques, pocoes;
-    SpriteBase *txtNomeVilao, *txtQtdHPAtualVilao, *txtQtdHPVilao, *txtQtdPPAtualVilao, *txtNomeGolpe;
-    SpriteBase *txtNomeHeroi, *txtQtdHPAtualHeroi, *txtQtdHPMaxHeroi, *txtQtdSPAtualHeroi, *txtQtdSPMaxHeroi, *txtQtdPPAtualHeroi;
+
+    ObjetoDeJogo *pSelE, *pSelD, *pSelPopUp, *popUp, *txtNomeAbaPopUp;
+    SpriteBase *txtNomeVilao, *txtQtdHPAtualVilao, *barraHPVilao, *txtQtdHPVilao, *txtQtdPPAtualVilao, *txtNomeGolpe;
+    SpriteBase *txtNomeHeroi, *txtQtdHPAtualHeroi, *barraHPHeroi, *txtQtdHPMaxHeroi, *txtQtdSPAtualHeroi, *txtQtdSPMaxHeroi, *txtQtdPPAtualHeroi;
 
     // variáveis internas
     Ataque* ataqueEscolhido;
+    Pocao* pocaoEscolhida;
     bool keyPressed, opTela;
     unsigned op, op2, tela_state, tela;
 
@@ -43,6 +46,7 @@ private:
     static void runPlayerChannel(FaseBatalha &);
     Ataque* getAtaque(list<Ataque*> lista, unsigned i);
     void handleVillainAttack();
+    std::string replicador(std::string caractere, int qtd);
 };
 
 #endif

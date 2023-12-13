@@ -4,7 +4,8 @@ SpriteBuffer Game::screen(161, 40);
 
 void Game::run(){
     Heroi *hero = new Heroi(ObjetoDeJogo("Heroi", Sprite("src/sprites/overworld/hero.img"),17,18), Bag());
-    FaseMenu fase("FaseMenu", Sprite("src/sprites/telas/menuBackground.img"));
+    Pocao p(Item("PocaoHP","Pocao para HP"),true,1);
+    FaseMenu fase("FaseMenu", SpriteAnimado("src/sprites/telas/menuAnimacao.anm"));
     fase.init();
     unsigned state = Fase::MENU;
     unsigned level = Fase::CRIADOR_PERSONA;
@@ -12,26 +13,40 @@ void Game::run(){
         switch (state)
         {
         case Fase::MENU:
-            state = fase.run(screen);
-            level = Fase::CRIADOR_PERSONA;
+            {
+                state = fase.run(screen);
+                level = Fase::CRIADOR_PERSONA;
+            }
             break;
         
         case Fase::OP_1:
             {
-				if (level == Fase::CRIADOR_PERSONA)
-				{
-					FaseCriador createPersona("CriadorPersona",Sprite("src/sprites/telas/telaPersonagem.img"));
-					createPersona.init();
-					state = createPersona.run(screen);
-                    level = Fase::MAPA;
-				} 
-				else {
-					state = Fase::MENU;
-                    level = Fase::CRIADOR_PERSONA;
+                if(fase.getVezes() < 2){
+                    if (level == Fase::CRIADOR_PERSONA)
+                    {
+                        Cutscene c1("Cutscene1", "src/sprites/cutscenes/scene_inicial", Sprite("src/sprites/telas/bkgCutscene.img"));
+                        c1.init();
+                        c1.run(screen);
+
+                        FaseCriador createPersona("CriadorPersona",Sprite("src/sprites/telas/telaPersonagem.img"));
+                        createPersona.init();
+                        state = createPersona.run(screen);
+                        level = Fase::LEVEL_1;
+
+                        Cutscene c2("Cutscene2", "src/sprites/cutscenes/scene_inicial_2", Sprite("src/sprites/telas/bkgCutscene.img"));
+                        c2.init();
+                        c2.run(screen);
+                    } 
+                    else {
+                        state = Fase::MENU;
+                        level = Fase::CRIADOR_PERSONA;
+                    }
+                }else {
+                    state = Fase::MAPA;
                 }
 			}
 			break;
-        case Fase::OP_2:
+        case Fase::MAPA:
             {
                 FaseMundo worldMap("MapaMundi", Sprite("src/sprites/telas/worldBackground.img"), *hero);
                 worldMap.init();
@@ -44,6 +59,12 @@ void Game::run(){
                 level1.init();
                 state = level1.run(screen);
                 level = Fase::LEVEL_2;
+
+                if(state == Fase::LEVEL_COMPLETE){
+                    Cutscene c1Conc("Cutscene1Conc", "src/sprites/cutscenes/scene_inicial_final", Sprite("src/sprites/telas/bkgCutscene.img"));
+                    c1Conc.init();
+                    c1Conc.run(screen);
+                }
             }
             break;
         case Fase::LEVEL_2:
@@ -97,7 +118,7 @@ void Game::run(){
                 state = level6.run(screen);
             }
             break;
-        case Fase::OP_5:
+        case Fase::OP_3:
 			system("clear");
 			std::cout << "Saindo...\n";
 			system("sleep 1");
@@ -105,7 +126,16 @@ void Game::run(){
 			break;
         case Fase::LEVEL_COMPLETE:
             hero->atualizarDados();
-            state = Fase::OP_2;
+            hero->getBag()->adicionarItem(p);
+            hero->getBag()->adicionarItem(p);
+            state = Fase::MAPA;
+            break;
+        case Fase::GAME_OVER:
+            {
+                //FaseGameOver gameOver("GameOver", Sprite("src/sprites/telas/bkgCutscene.img"));
+                //gameOver.init();
+                //state = gameOver.run(screen);
+            }
             break;
         default:
             {

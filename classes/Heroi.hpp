@@ -20,6 +20,7 @@ public:
     int getXMapa() const { return xMapa; }
     int getYMapa() const { return yMapa; }
     Bag* getBag() const { return bagDoHeroi; }
+    Arma* getArma() const { return armaEquipada; }
 
     void setXMapa(int x) { xMapa = x; }
     void setYMapa(int y) { yMapa = y; }

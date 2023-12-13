@@ -31,7 +31,7 @@ private:
     std::array<int, 5> listaTracos;
     std::thread tela_thread_;
 
-    ObjetoDeJogo *pSelOpE, *pSelOpD;
+    ObjetoDeJogo *pSelOpE, *pSelOpD, *caixaContinuar;
 
     SpriteBase *txtOpCabelo, *txtOpOlho, *txtOpNariz, *txtOpAdicional, *txtOpCorpo;
     SpriteBase *sprtCabelo, *sprtOlho, *sprtNariz, *sprtAdicional, *sprtCorpo, *sprtFront;

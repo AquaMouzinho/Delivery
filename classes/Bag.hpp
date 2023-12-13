@@ -21,6 +21,10 @@ public:
         return (itens.find(key) != itens.cend());
     }
 
+    Item* getItem(std::string key) {
+        return itens.find(key)->second;
+    }
+
     int quantidadeDoItem(std::string key) {
         return itens.count(key);
     }

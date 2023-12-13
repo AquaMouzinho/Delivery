@@ -4,22 +4,28 @@
 #include <unistd.h>
 
 void FaseMenu::init(){
-    objs.push_back(new ObjetoDeJogo("Titulo", Sprite("src/sprites/telas/staticMenuTitle.img"),5,54));
+    objs.push_back(new ObjetoDeJogo("Titulo", SpriteAnimado("src/sprites/telas/deliveryMenuTitle.anm"),5, 65));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu1", TextSprite("CRIAR PERSONAGEM"), 21, 70));
+    objs.push_back(new ObjetoDeJogo("OPMenu1", TextSprite("NOVO JOGO"), 21, 80));
+    txtOpNovo = objs.back()->getSprite();
 
-    objs.push_back(new ObjetoDeJogo("OPMenu2", TextSprite("MAPA MUNDI"), 23, 70));
+    objs.push_back(new ObjetoDeJogo("OPMenu2", TextSprite("SOBRE"), 23, 80));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu3", TextSprite("MAPA CIDADE"), 25, 70));
+//    objs.push_back(new ObjetoDeJogo("OPMenu3", TextSprite("MAPA CIDADE"), 25, 70));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu4", TextSprite("BATALHA"), 27, 70));
+//    objs.push_back(new ObjetoDeJogo("OPMenu4", TextSprite("BATALHA"), 27, 70));
 
-    objs.push_back(new ObjetoDeJogo("OPMenu5", TextSprite("SAIR"), 29, 70));
+    objs.push_back(new ObjetoDeJogo("OPMenu5", TextSprite("SAIR"), 25, 80));
 
-    objs.push_back(new ObjetoDeJogo("Seletor", TextSprite("→ "), 21, 65));
+    objs.push_back(new ObjetoDeJogo("Seletor", TextSprite("→ "), 21, 75));
     pSel = objs.back();
 
+    help = new ObjetoDeJogo("PainelHelp", Sprite("src/sprites/itens/help.img"), 4, 40);
+    help->desativarObj();
+    objs.push_back(help);
+
     op = Fase::OP_1;
+    vezes = 0;
     gameState = Fase::PLAYING;
     tela = Fase::PLAYING;
     menu_thread_ = thread(&FaseMenu::runPlayerChannel, ref(*this));
@@ -27,7 +33,10 @@ void FaseMenu::init(){
 
 unsigned FaseMenu::run(SpriteBuffer &screen){
     tela = Fase::PLAYING;
+    vezesRodado();
 
+    if(vezes > 1) txtOpNovo->putAt(TextSprite("CONTINUAR"), 0, 0);
+    
     system("clear");
     this->draw(screen);
     this->show(screen);
@@ -39,30 +48,46 @@ unsigned FaseMenu::run(SpriteBuffer &screen){
             switch (entrada)
             {
             case 'q':
-                gameState = Fase::LEVEL_COMPLETE;
-                return Fase::OP_5;
+                if(!helpAparecendo){
+                    gameState = Fase::LEVEL_COMPLETE;
+                    return Fase::OP_3;
+                }
             
             case 's':
                 {
-                    op = Fase::OP_1 + (op - Fase::OP_1 +1) % 5;
+                    if(!helpAparecendo){
+                        op = Fase::OP_1 + (op - Fase::OP_1 +1) % 3;
 
-                    pSel->moveTo(21 + (op - Fase::OP_1) * 2, 65);
+                        pSel->moveTo(21 + (op - Fase::OP_1) * 2, 75);
+                    }
                 }
                 break;
             case 'w':
                 {
-                    op = Fase::OP_1 + (5 + ((op - Fase::OP_1) -1)) % 5;
+                    if(!helpAparecendo){
+                        op = Fase::OP_1 + (3 + ((op - Fase::OP_1) -1)) % 3;
 
-                    pSel->moveTo(21 + (op - Fase::OP_1) * 2, 65);
+                        pSel->moveTo(21 + (op - Fase::OP_1) * 2, 75);
+                    }
                 }
                 break;
             case 'f':
                 {
-                    if(op == Fase::OP_5){
-                        gameState = Fase::LEVEL_COMPLETE;
+                    if(helpAparecendo){
+                        helpAparecendo = false;
+                        help->desativarObj();
+                    }else{
+                        if( op == Fase::OP_2) {
+                            helpAparecendo = true;
+                            help->ativarObj();
+                        }else {
+                            if(op == Fase::OP_3){
+                                gameState = Fase::LEVEL_COMPLETE;
+                            }
+                            tela = Fase::PAUSED;
+                            return op;
+                        }
                     }
-                    tela = Fase::PAUSED;
-                    return op;
                 }
                 break;
             }

@@ -126,7 +126,7 @@ void Game::run(){
             break;
         case Fase::LEVEL_8:
             {
-                hero->equiparArma(new Arma("Teste", "teste", 40));
+                hero->equiparArma(new Arma("Teste", "teste", 50));
                 FaseBatalha level6("Level5", Sprite("src/sprites/telas/battleBackground.img"), Monstro(ObjetoDeJogo("Vilao6",Sprite("src/sprites/viloes/Horns.img"), 8, 70),"Horns", 0, 100, 30, 20, 4, 1, {new Ataque("Laceração", 5, 0), new Ataque("Tira-Olhos", 8, 0), new Ataque("Mal Súbito", 25, 4)}), *hero);
                 level6.init();
                 state = level6.run(screen);

@@ -51,9 +51,6 @@ void FaseMundo::init(){
     fases[2] = new Portal(ObjetoDeJogo("Cidadela", Sprite("src/sprites/overworld/level.img"), 11,40), Fase::LEVEL_3);
     objs.push_back(fases[2]);
     
-    fases[8] = new Portal(ObjetoDeJogo("Posto", Sprite("src/sprites/overworld/level.img"), 27,54), Fase::SHOP);
-    objs.push_back(fases[8]);
-    
     //fases[4] = new Portal(ObjetoDeJogo("Areia Roxa", Sprite("src/sprites/overworld/level.img"), 30,60), Fase::LEVEL_4);
     //objs.push_back(fases[4]);
     
@@ -69,6 +66,9 @@ void FaseMundo::init(){
     fases[6] = new Portal(ObjetoDeJogo("Batalha Final", SpriteAnimado("src/sprites/overworld/level.anm"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
     objs.push_back(fases[6]);
     
+    fases[7] = new Portal(ObjetoDeJogo("Posto", Sprite("src/sprites/overworld/level.img"), 27,54), Fase::SHOP);
+    objs.push_back(fases[7]);
+
     sprtHero = new ObjetoDeJogo("Heroi", Sprite("src/sprites/overworld/hero.img"), hero.getYMapa(), hero.getXMapa());
     objs.push_back(sprtHero);
     

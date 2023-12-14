@@ -30,7 +30,7 @@ private:
     //Dialog ;
     Door *porta;
     Chest *caixa;
-    Portal *fases[9];
+    Portal *fases[8];
     Npc *person;
     SpriteBase *txtFaseNome, *txtQtdHP, *txtQtdPP, *barraHP;
 

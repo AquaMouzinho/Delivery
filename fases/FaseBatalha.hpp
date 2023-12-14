@@ -29,7 +29,7 @@ private:
     Monstro *vilao;
     std::list<ObjetoDeJogo*> ataques, pocoes;
 
-    ObjetoDeJogo *pSelE, *pSelD, *pSelPopUp, *popUp, *txtNomeAbaPopUp;
+    ObjetoDeJogo *qtdPocoesHP, *pSelE, *pSelD, *pSelPopUp, *popUp, *txtNomeAbaPopUp, *caixaContinuar;
     SpriteBase *txtNomeVilao, *txtQtdHPAtualVilao, *barraHPVilao, *txtQtdHPVilao, *txtQtdPPAtualVilao, *txtNomeGolpe;
     SpriteBase *txtNomeHeroi, *txtQtdHPAtualHeroi, *barraHPHeroi, *txtQtdHPMaxHeroi, *txtQtdSPAtualHeroi, *txtQtdSPMaxHeroi, *txtQtdPPAtualHeroi;
 

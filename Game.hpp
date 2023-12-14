@@ -9,6 +9,7 @@
 #include "fases/FaseMundo.hpp"
 #include "fases/FaseCriador.hpp"
 #include "fases/FaseBatalha.hpp"
+#include "fases/FaseBanner.hpp"
 #include "fases/Cutscene.hpp"
 
 #include "classes/Heroi.hpp"

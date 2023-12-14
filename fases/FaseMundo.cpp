@@ -10,6 +10,8 @@ void FaseMundo::init(){
     objs.push_back(new ObjetoDeJogo("TxtNomeHeroi", TextSprite(hero.getNome()), 7, 136));
     objs.push_back(new ObjetoDeJogo("TxtHPAtHeroi", TextSprite(std::to_string(hero.getCurrentHPValue())), 13, 146));
     txtQtdHP = objs.back()->getSprite();
+    objs.push_back(new ObjetoDeJogo("BarraHPHeroi", TextSprite(replicador("█", (hero.getCurrentHPValue()/(hero.getMAXHPValue()/5)))+std::string(5 - (hero.getCurrentHPValue()/(hero.getMAXHPValue()/5)), ' ')), 13, 140));
+    barraHP = objs.back()->getSprite();
 
     objs.push_back(new ObjetoDeJogo("TxtHPMaxHeroi", TextSprite(std::to_string(hero.getMAXHPValue())), 13, 149));
     objs.push_back(new ObjetoDeJogo("TxtPPAtHeroi", TextSprite(std::to_string(hero.getMAXPPValue())), 15, 146));
@@ -49,34 +51,38 @@ void FaseMundo::init(){
     fases[2] = new Portal(ObjetoDeJogo("Cidadela", Sprite("src/sprites/overworld/level.img"), 11,40), Fase::LEVEL_3);
     objs.push_back(fases[2]);
     
-    fases[3] = new Portal(ObjetoDeJogo("Lojinha", Sprite("src/sprites/overworld/level.img"), 27,54), Fase::SHOP);
+    fases[8] = new Portal(ObjetoDeJogo("Posto", Sprite("src/sprites/overworld/level.img"), 27,54), Fase::SHOP);
+    objs.push_back(fases[8]);
+    
+    //fases[4] = new Portal(ObjetoDeJogo("Areia Roxa", Sprite("src/sprites/overworld/level.img"), 30,60), Fase::LEVEL_4);
+    //objs.push_back(fases[4]);
+    
+    fases[3] = new Portal(ObjetoDeJogo("Reino Bern", SpriteAnimado("src/sprites/overworld/level.anm"), 23,74), Fase::LEVEL_5,  (hero.fasesConcluidas[2] ? true : false));
     objs.push_back(fases[3]);
     
-    fases[4] = new Portal(ObjetoDeJogo("Areia Roxa", Sprite("src/sprites/overworld/level.img"), 30,60), Fase::LEVEL_4);
+    fases[4] = new Portal(ObjetoDeJogo("Stupendus", SpriteAnimado("src/sprites/overworld/level.anm"), 22,90), Fase::LEVEL_6,  (hero.fasesConcluidas[3] ? true : false));
     objs.push_back(fases[4]);
     
-    fases[5] = new Portal(ObjetoDeJogo("Reino Bern", SpriteAnimado("src/sprites/overworld/level.anm"), 23,74), Fase::LEVEL_5,  (hero.fasesConcluidas[2] ? true : false));
+    fases[5] = new Portal(ObjetoDeJogo("Surpresa", SpriteAnimado("src/sprites/overworld/level.anm"), 15,113), Fase::LEVEL_7,  (hero.fasesConcluidas[4] ? true : false));
     objs.push_back(fases[5]);
     
-    fases[6] = new Portal(ObjetoDeJogo("Stupendus Circ", SpriteAnimado("src/sprites/overworld/level.anm"), 22,90), Fase::LEVEL_6,  (hero.fasesConcluidas[3] ? true : false));
+    fases[6] = new Portal(ObjetoDeJogo("Batalha Final", SpriteAnimado("src/sprites/overworld/level.anm"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
     objs.push_back(fases[6]);
-    
-    fases[7] = new Portal(ObjetoDeJogo("Surpresa", SpriteAnimado("src/sprites/overworld/level.anm"), 15,113), Fase::LEVEL_7,  (hero.fasesConcluidas[4] ? true : false));
-    objs.push_back(fases[7]);
-    
-    fases[8] = new Portal(ObjetoDeJogo("Batalha Final", SpriteAnimado("src/sprites/overworld/level.anm"), 11,113), Fase::LEVEL_8,  (hero.fasesConcluidas[5] ? true : false));
-    objs.push_back(fases[8]);
     
     sprtHero = new ObjetoDeJogo("Heroi", Sprite("src/sprites/overworld/hero.img"), hero.getYMapa(), hero.getXMapa());
     objs.push_back(sprtHero);
     
-    ObjetoDeJogo a("Dialog", Sprite("src/sprites/dialog.img"), 28, 5);
-    caixaDeTexto = new Dialog(a, "teste", 10, 4);
+    //ObjetoDeJogo a("Dialog", Sprite("src/sprites/dialog.img"), 28, 5);
+    caixaDeTexto = new ObjetoDeJogo("Dialog", Sprite("src/sprites/itens/signWorld.img"), 28, 5);//new Dialog(a, "teste", 10, 4);
     objs.push_back(caixaDeTexto);
     caixaDeTexto->desativarObj();
 
+    caixaConfirmar = new ObjetoDeJogo("CaixaConfirmar", Sprite("src/sprites/itens/boxEntrandoFase.img"), 15, 70);
+    caixaConfirmar->desativarObj();
+    objs.push_back(caixaConfirmar);
+
     // Placa Nome Fase
-    objs.push_back(new ObjetoDeJogo("TxtNomeFase", TextSprite("              "), 28, 136));
+    objs.push_back(new ObjetoDeJogo("TxtNomeFase", TextSprite(string(15, ' ')), 28, 136));
     txtFaseNome = objs.back()->getSprite();
 
     objs.push_back(new ObjetoDeJogo("TxtPressione", TextSprite("PRESSIONE F"), 30, 138));
@@ -126,12 +132,26 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                         for(auto &fase : fases){
                             if(fase->colideCom(*sprtHero)){
                                 if(!fase->getCompletado()){
-                                    tela_state = Fase::PAUSED;
-                                    hero.setXMapa(sprtHero->getPosC());
-                                    hero.setYMapa(sprtHero->getPosL());
-                                    hero.salvarDados();
-                                    this->closeThreads();
-                                    return fase->getEnumeracao();
+                                    if(fase->getEnumeracao() != Fase::LEVEL_3 && fase->getEnumeracao() != Fase::SHOP){
+                                        tela_state = Fase::PAUSED;
+                                        hero.setXMapa(sprtHero->getPosC());
+                                        hero.setYMapa(sprtHero->getPosL());
+                                        hero.salvarDados();
+                                        caixaConfirmar->ativarObj();
+
+                                        system("clear");
+                                        this->update();
+                                        this->draw(screen);
+                                        this->show(screen);
+                                        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+                                        
+                                        this->closeThreads();
+                                        return fase->getEnumeracao();
+                                    }else{
+                                        hero.curarHP(hero.getMAXHPValue() - hero.getCurrentHPValue());
+                                        txtQtdHP->putAt(TextSprite(to_string(hero.getCurrentHPValue())),0,0);
+                                        barraHP->putAt(TextSprite(replicador("█", (hero.getCurrentHPValue()/(hero.getMAXHPValue()/5)))+std::string(5 - (hero.getCurrentHPValue()/(hero.getMAXHPValue()/5)), ' ')),0,0);
+                                    }
                                 }
                             }
                         }
@@ -146,6 +166,7 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                 break;
             case 'q':
                 tela_state = Fase::END_GAME;
+                caixaConfirmar->ativarObj();
                 closeThreads();
                 return Fase::MENU;
             }
@@ -153,15 +174,9 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
         }
 
         if(sprtHero->colideCom(*placa)){
-            if(!caixaDeTexto->isAtivado()){
-                caixaDeTexto->ativarObj();
-                caixaDeTexto->switchAtivado();
-            }
+            caixaDeTexto->ativarObj();
         }else{
-            if(caixaDeTexto->isAtivado()){
-                caixaDeTexto->desativarObj();
-                caixaDeTexto->switchAtivado();
-            }
+            caixaDeTexto->desativarObj();
         }
 
         colideComFase = false;
@@ -193,9 +208,9 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
         }
 
         if(sprtHero->colideCom(*person)){
-            if(hero.getBag()->temItem("Chave da Cidade")){
+            if(fases[3]->getCompletado()){
                 mapaColisao[person->getPosL()][person->getPosC()] = 1;
-                hero.getBag()->removerItem("Chave da Cidade");
+                //hero.getBag()->removerItem("Chave da Cidade");
                 person->desativarObj();
             }
         }
@@ -238,6 +253,16 @@ void FaseMundo::runPlayerChannel(FaseMundo &obj){
 
 void FaseMundo::closeThreads(){
     mundo_thread_.join();
+}
+
+std::string FaseMundo::replicador(std::string caractere, int qtd){
+    unsigned it = 0;
+    std::string pontos = "";
+
+    for(; it < qtd; it++)
+        pontos += caractere;
+    
+    return pontos;
 }
 
 bool FaseMundo::leitorMapa(std::string file, std::array<std::array<int, 160>, 40> &mapa) {

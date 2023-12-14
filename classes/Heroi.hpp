@@ -24,6 +24,8 @@ public:
 
     void setXMapa(int x) { xMapa = x; }
     void setYMapa(int y) { yMapa = y; }
+    void equiparArma(Arma *pArma) { armaEquipada = pArma;}
+    void desequiparArma() { armaEquipada = nullptr;}
 
     bool salvarDados();
     bool atualizarDados();

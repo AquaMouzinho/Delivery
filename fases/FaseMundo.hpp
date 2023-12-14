@@ -26,13 +26,13 @@ public:
 
 private:
     Heroi hero;
-    ObjetoDeJogo *sprtHero, *placa;
-    Dialog *caixaDeTexto;
+    ObjetoDeJogo *sprtHero, *placa, *caixaDeTexto, *caixaConfirmar;
+    //Dialog ;
     Door *porta;
     Chest *caixa;
     Portal *fases[9];
     Npc *person;
-    SpriteBase *txtFaseNome, *txtQtdHP, *txtQtdPP;
+    SpriteBase *txtFaseNome, *txtQtdHP, *txtQtdPP, *barraHP;
 
     bool keyPressed;
     unsigned op, tela_state, tela;
@@ -43,6 +43,7 @@ private:
 
     bool leitorMapa(std::string file, std::array<std::array<int, 160>, 40> &mapa);
     static void runPlayerChannel(FaseMundo &);
+    std::string replicador(std::string carac, int qtd);
 };
 
 #endif

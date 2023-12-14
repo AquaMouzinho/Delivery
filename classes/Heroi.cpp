@@ -22,8 +22,7 @@ bool Heroi::atualizarDados(){
             break;
         case 10:
             this->setXMapa(stoi(linha.substr(0, linha.find(","))));
-            this->moveTo(this->yMapa, this->xMapa);
-            //this->setYMapa(stoi(linha.substr(linha.find(","), *(linha.cend()))));
+            this->setYMapa(stoi(linha.substr(linha.find(",")+1, linha.length())));
             break;
         case 11:
             this->fasesConcluidas = vector<int>{linha.at(0)-'0',linha.at(2)-'0',linha.at(4)-'0',linha.at(6)-'0',linha.at(8)-'0',linha.at(10)-'0'};
@@ -47,7 +46,7 @@ bool Heroi::salvarDados() {
     fout << getCurrentSPValue() << "/" << getMAXSPValue() << endl;
     fout << getAtkValue() << endl;
     fout << getDefValue() << endl;
-    fout << (armaEquipada != nullptr ? "" : "not") << endl;
+    fout << (armaEquipada != nullptr ? "yes" : "not") << endl;
     fout << "{"<< "" << "}" << endl;
     fout << getStatusValue() << endl;
     fout << getXMapa() << ","<< getYMapa() << endl;

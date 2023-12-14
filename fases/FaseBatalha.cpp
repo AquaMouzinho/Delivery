@@ -85,6 +85,8 @@ void FaseBatalha::init(){
 
 unsigned FaseBatalha::run(SpriteBuffer &screen){     
     string linha = "";
+    Sound backtrack("src/sounds/battle.mp3");
+    backtrack.playloop();
 
     system("clear");
     this->update();
@@ -183,6 +185,7 @@ unsigned FaseBatalha::run(SpriteBuffer &screen){
                                         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
                                         closeThreads();
+                                        backtrack.pause();
                                         return Fase::LEVEL_COMPLETE;
                                     }
 
@@ -205,6 +208,7 @@ unsigned FaseBatalha::run(SpriteBuffer &screen){
                                         caixaContinuar->ativarObj();
                                         tela_state = Fase::GAME_OVER;
                                         closeThreads();
+                                        backtrack.pause();
                                         return Fase::GAME_OVER;
                                     }
                                   
@@ -288,6 +292,7 @@ unsigned FaseBatalha::run(SpriteBuffer &screen){
         this->show(screen);
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
+    backtrack.pause();
     return Fase::MENU;
 }
 

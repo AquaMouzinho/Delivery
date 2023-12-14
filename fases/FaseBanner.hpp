@@ -2,6 +2,8 @@
 #define FASEBANNER_HPP
 
 #include "../ASCII_Engine/Fase.hpp"
+#include "../ASCII_Engine/Sound.hpp"
+
 #include <thread>
 #include <unistd.h>
 #include <termios.h>

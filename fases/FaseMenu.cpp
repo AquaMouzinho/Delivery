@@ -32,6 +32,9 @@ void FaseMenu::init(){
 }
 
 unsigned FaseMenu::run(SpriteBuffer &screen){
+    Sound backtrack("src/sounds/opening.mp3");
+    backtrack.playloop();
+
     tela = Fase::PLAYING;
     vezesRodado();
 
@@ -50,6 +53,7 @@ unsigned FaseMenu::run(SpriteBuffer &screen){
             case 'q':
                 if(!helpAparecendo){
                     gameState = Fase::LEVEL_COMPLETE;
+                    backtrack.pause();
                     return Fase::OP_3;
                 }
             
@@ -85,6 +89,7 @@ unsigned FaseMenu::run(SpriteBuffer &screen){
                                 gameState = Fase::LEVEL_COMPLETE;
                             }
                             tela = Fase::PAUSED;
+                            backtrack.pause();
                             return op;
                         }
                     }
@@ -102,6 +107,7 @@ unsigned FaseMenu::run(SpriteBuffer &screen){
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
 
+    backtrack.pause();
     gameState = Fase::LEVEL_COMPLETE;
     return Fase::END_GAME;
 }

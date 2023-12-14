@@ -4,6 +4,7 @@
 #include "../ASCII_Engine/Fase.hpp"
 #include "../ASCII_Engine/Sprite.hpp"
 #include "../ASCII_Engine/SpriteAnimado.hpp"
+#include "../ASCII_Engine/Sound.hpp"
 
 #include <unistd.h>
 #include <termios.h>

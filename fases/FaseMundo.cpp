@@ -93,6 +93,8 @@ void FaseMundo::init(){
 }
 
 unsigned FaseMundo::run(SpriteBuffer &screen){
+    Sound backtrack("src/sounds/world.mp3");
+    backtrack.playloop();
     bool colideComFase = false;
     tela_state = Fase::PLAYING;
     
@@ -146,6 +148,7 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                                         std::this_thread::sleep_for(std::chrono::milliseconds(300));
                                         
                                         this->closeThreads();
+                                        backtrack.pause();
                                         return fase->getEnumeracao();
                                     }else{
                                         hero.curarHP(hero.getMAXHPValue() - hero.getCurrentHPValue());
@@ -166,8 +169,10 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
                 break;
             case 'q':
                 tela_state = Fase::END_GAME;
+                backtrack.pause();
                 caixaConfirmar->ativarObj();
                 closeThreads();
+                backtrack.pause();
                 return Fase::MENU;
             }
 
@@ -222,7 +227,7 @@ unsigned FaseMundo::run(SpriteBuffer &screen){
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
     }
-
+    backtrack.pause();
     return Fase::LEVEL_COMPLETE;
 }
 

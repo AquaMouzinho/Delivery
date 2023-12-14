@@ -5,6 +5,7 @@
 #include "../classes/Monstro.hpp"
 #include "../classes/Heroi.hpp"
 #include "../classes/Pocao.hpp"
+#include "../ASCII_Engine/Sound.hpp"
 
 #include <thread>
 #include <chrono>

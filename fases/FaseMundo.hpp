@@ -8,6 +8,7 @@
 #include "../classes/Chest.hpp"
 #include "../classes/Door.hpp"
 #include "../classes/Dialog.hpp"
+#include "../ASCII_Engine/Sound.hpp"
 
 #include <thread>
 #include <fstream>

@@ -5,6 +5,7 @@
 #include "../ASCII_Engine/Sprite.hpp"
 #include "../ASCII_Engine/SpriteBase.hpp"
 #include "../ASCII_Engine/SpriteBuffer.hpp"
+#include "../ASCII_Engine/Sound.hpp"
 
 #include "../classes/Heroi.hpp"
 

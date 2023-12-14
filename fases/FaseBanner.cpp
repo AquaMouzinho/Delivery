@@ -11,6 +11,9 @@ void FaseBanner::init(){
 }
 
 unsigned FaseBanner::run(SpriteBuffer &screen){
+    Sound backtrack("src/sounds/banner.mp3");
+    backtrack.playloop();
+
     system("clear");
     this->draw(screen);
     this->show(screen);
@@ -28,7 +31,7 @@ unsigned FaseBanner::run(SpriteBuffer &screen){
                 this->draw(screen);
                 this->show(screen);
                 closeThreads();
-
+                backtrack.pause();
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 return Fase::MENU;
             }
@@ -40,7 +43,7 @@ unsigned FaseBanner::run(SpriteBuffer &screen){
         this->show(screen);
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
-
+    backtrack.pause();
     return true;
 }
 

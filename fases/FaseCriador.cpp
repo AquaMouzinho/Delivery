@@ -56,6 +56,9 @@ void FaseCriador::init(){
 }
 
 unsigned FaseCriador::run(SpriteBuffer &screen){
+    Sound backtrack("src/sounds/criador.mp3");
+    backtrack.playloop();
+
     system("clear");
     this->draw(screen);
     this->show(screen);
@@ -67,6 +70,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                 case 'q':
                     tela_state = Fase::LEVEL_COMPLETE;
                     this->closeThreads();
+                    backtrack.pause();
                     return Fase::MENU;
                 case 'w':
                     {
@@ -196,6 +200,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
                                 this->show(screen);
 
                                 this->closeThreads();
+                                backtrack.pause();
                                 return Fase::LEVEL_1;
                             }
                         }
@@ -212,6 +217,7 @@ unsigned FaseCriador::run(SpriteBuffer &screen){
     }
     tela_state = Fase::LEVEL_COMPLETE;
     this->closeThreads();
+    backtrack.pause();
     return Fase::OP_2;
 }
 

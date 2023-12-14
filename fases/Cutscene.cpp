@@ -39,6 +39,9 @@ void Cutscene::init(){
 }
 
 unsigned Cutscene::run(SpriteBuffer &screen){
+    Sound backtrack("src/sounds/cutscene.mp3");
+    backtrack.playloop();
+
     system("clear");
     this->draw(screen);
     this->show(screen);
@@ -74,7 +77,7 @@ unsigned Cutscene::run(SpriteBuffer &screen){
     this->show(screen);
     tela_state = Fase::PAUSED;
     closeThreads();
-
+    backtrack.pause();
     return true;
 }
 
